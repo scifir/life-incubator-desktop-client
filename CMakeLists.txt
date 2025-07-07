@@ -17,6 +17,10 @@ if (NOT DEFINED LINUX_LIBRARY_DIR AND PLATFORM MATCHES "linux")
 	set(CMAKE_LIBRARY_PATH "/usr/lib/*;/usr/lib;/usr/lib64")
 endif()
 
+if (PLATFORM MATCHES "windows")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MT")
+endif()
+
 option(BUILD_SHARED_LIBS "Build using shared libraries" OFF)
 option(BUILD_TESTING "Build test programs" OFF)
 option(DEBUG_FLAGS "Add debug flags" OFF)
@@ -80,26 +84,75 @@ if(!ICU_FOUND)
 	message("Library ICU not found, install it in your system first.")
 endif()
 
-find_package(PkgConfig REQUIRED)
-pkg_search_module(GTK gtk-3.0)
-
 aux_source_directory(ui SRC_LIST)
 aux_source_directory(ui/windows SRC_LIST1)
 aux_source_directory(core SRC_LIST2)
 aux_source_directory(data SRC_LIST3)
-aux_source_directory(extra SRC_LIST4)
-include_directories(. /usr/include/wx-3.2 /usr/include/gtk-3.0 /usr/include/glib-2.0 /usr/lib/x86_64-linux-gnu/glib-2.0/include /usr/include/cairo /usr/include/pango-1.0 /usr/include/harfbuzz /usr/include/gdk-pixbuf-2.0 /usr/include/graphene-1.0 /usr/lib/x86_64-linux-gnu/graphene-1.0/include /usr/include/atk-1.0 ${GTK_INCLUDE_DIRS})
+
+if (PLATFORM MATCHES "linux")
+	find_package(PkgConfig REQUIRED)
+	pkg_search_module(GTK gtk-3.0)
+	
+	aux_source_directory(extra SRC_LIST4)
+	
+	include_directories(/usr/include/wx-3.2 /usr/include/gtk-3.0 /usr/include/glib-2.0 /usr/lib/x86_64-linux-gnu/glib-2.0/include /usr/include/cairo /usr/include/pango-1.0 /usr/include/harfbuzz /usr/include/gdk-pixbuf-2.0 /usr/include/graphene-1.0 /usr/lib/x86_64-linux-gnu/graphene-1.0/include /usr/include/atk-1.0 ${GTK_INCLUDE_DIRS})
+endif()
+
+if (PLATFORM MATCHES "windows")
+	#set(wxWidgets_DEBUG ON)
+	#include_directories(C:\Programas\wxWidgets-3.3.0\include)
+	#set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH} C:/Programas/wxWidgets-3.3.0 C:/Programas/wxWidgets-3.3.0/lib/vc_x64_dll")
+	#set(wxWidgets_DIR "C:/Programas/wxWidgets-3.3.0/install/lib/cmake/wxWidgets")
+	#set(CMAKE_PREFIX_PATH "C:/Programas/wxWidgets-3.3.0/install/lib/cmake/wxWidgets")
+	#set(wxWidgets_USE_STATIC ON)
+	#set(wxWidgets_INCLUDE_DIRS "C:/Programas/wxWidgets-3.3.0/include C:/Programas/wxWidgets-3.3.0/lib/vc_x64_dll/mswu")
+	#set(wxWidgets_ROOT_DIR "C:/Programas/wxWidgets-3.3.0")
+	#set(wxWidgets_LIB_DIR "C:/Programas/wxWidgets-3.3.0/lib/vc_x64_lib")
+	#set(wxWidgets_CONFIGURATION mswu)
+	#set(CMAKE_FIND_LIBRARY_SUFFIXES .lib .a .dll)
+#	include_directories(C:\Programas\vcpkg\installed\x64-windows\lib\mswu\wx $env{VCPKG_ROOT}/installed/$env{VCPKG_DEFAULT_TRIPLET}/include/wx $env{VCPKG_ROOT}/installed/$env{VCPKG_DEFAULT_TRIPLET}/include/wx/msw)
+endif()
+
+include_directories(.)
+#include_directories(${PROJECT_NAME} PUBLIC ${wxWidgets_INCLUDE_DIRS})
 
 # Add that for win32 only
 #set(wxWidgets_CONFIGURATION mswu)
 #set(wxWidgets_ROOT_DIR /usr/include/wx-3.2)
 #set(wxWidgets_LIB_DIR /usr/lib/x86_64-linux-gnu)
 find_package(wxWidgets REQUIRED COMPONENTS core net base adv stc aui html media gl)
-include(${wxWidgets_USE_FILE})
-message(${wxWidgets_USE_FILE})
+#set(wxWidgets_USE_LIBS)
+#find_package(wxWidgets REQUIRED COMPONENTS core base)
+#include(${wxWidgets_USE_FILE})
+#message(${wxWidgets_USE_FILE})
 
-add_executable(${PROJECT_NAME} ${SRC_LIST} ${SRC_LIST1} ${SRC_LIST2} ${SRC_LIST3} ${SRC_LIST4})
-target_link_libraries(${PROJECT_NAME} scifir-biology scifir-chemistry scifir-units Boost::system ${ICU_LIBRARIES} ${wxWidgets_LIBRARIES} ${GTK_LIBRARIES} gdk-3 gtk-3 vlc)
-target_include_directories(${PROJECT_NAME} PUBLIC ${wxWidgets_INCLUDE_DIRS})
+if (PLATFORM MATCHES "windows")
+	add_executable(${PROJECT_NAME} WIN32 ${SRC_LIST} ${SRC_LIST1} ${SRC_LIST2} ${SRC_LIST3} ${SRC_LIST4})
+endif()
+
+if (PLATFORM MATCHES "linux")
+	add_executable(${PROJECT_NAME} ${SRC_LIST} ${SRC_LIST1} ${SRC_LIST2} ${SRC_LIST3} ${SRC_LIST4})
+endif()
+
+#include_directories("C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/include")
+#include_directories("${VCPKG_ROOT}/installed/${VCPKG_DEFAULT_TRIPLET}/include")
+#include_directories("C:/Programas/wxWidgets-3.3.0/lib/vc_x64_lib/msw")
+#include_directories("C:/Programas/wxWidgets-3.3.0/include")
+#include_directories("C:/Programas/wxWidgets-3.3.0/include/wx")
+#include_directories("C:/Programas/wxWidgets-3.3.0/include/msvc")
+
+#add_definitions(-DUNICODE -D_UNICODE)
+
+target_link_libraries(${PROJECT_NAME} scifir-biology scifir-chemistry scifir-units Boost::system ${ICU_LIBRARIES} ${wxWidgets_LIBRARIES})
+
+if (PLATFORM MATCHES "windows")
+	#target_link_options(${PROJECT_NAME} PRIVATE "/SUBSYSTEM:WINDOWS")
+endif()
+
+if (PLATFORM MATCHES "linux")
+	target_link_libraries(${PROJECT_NAME} ${GTK_LIBRARIES} gdk-3 gtk-3 vlc bluetooth)
+endif()
 
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
+
+#add_definitions(${wxWidgets_DEFINITIONS})

@@ -1,5 +1,7 @@
-#ifndef DNA_EDITOR_UI_MENU_BAR_HPP_INCLUDED
-#define DNA_EDITOR_UI_MENU_BAR_HPP_INCLUDED
+#ifndef LIFE_INCUBATOR_UI_MENU_BAR_HPP_INCLUDED
+#define LIFE_INCUBATOR_UI_MENU_BAR_HPP_INCLUDED
+
+#define _HAS_STD_BYTE 0
 
 #include "wx/frame.h"
 #include "wx/menu.h"
@@ -19,11 +21,12 @@ namespace life_incubator
 			menu_bar();
 
 		private:
-			void OnHello(wxCommandEvent&);
-			void OnExit(wxCommandEvent&);
-			void OnAbout(wxCommandEvent&);
+			void OnHello(wxCommandEvent& event);
+			void OnExit(wxCommandEvent& event);
+			void OnAbout(wxCommandEvent& event);
+			void detect_local_incubators(wxCommandEvent& event);
 			//wxDECLARE_EVENT_TABLE();
 	};
 }
 
-#endif // DNA_EDITOR_UI_MENU_BAR_HPP_INCLUDED
+#endif // LIFE_INCUBATOR_UI_MENU_BAR_HPP_INCLUDED

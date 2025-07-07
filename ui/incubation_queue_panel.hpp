@@ -18,7 +18,7 @@ namespace life_incubator
 			void add_incubation(const incubation& x_incubation);
 			void load_incubation_detail(const incubation& x_incubation);
 
-			wxSimpleHtmlListBox* list;
+			wxPanel* list;
 			wxScrolledWindow* detail;
 			//wxMediaCtrl* video;
 	};

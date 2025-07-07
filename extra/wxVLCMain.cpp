@@ -7,10 +7,8 @@
  * License:   wxWindows licence
  **************************************************************/
 
-//#include "wx_pch.h"
-//#include "wxVLCApp.h"
 #include "ui/app.hpp"
-#include "wxVLCMain.h"
+#include "./wxVLCMain.h"
 #include <wx/msgdlg.h>
 #include <wx/filename.h>
 
@@ -22,16 +20,13 @@
 #endif // GDK_WINDOWING_X11
 #endif
 
-//(*InternalHeaders(wxVLCFrame)
 #include <wx/bitmap.h>
 #include <wx/icon.h>
 #include <wx/image.h>
 #include <wx/intl.h>
 #include <wx/settings.h>
 #include <wx/string.h>
-//*)
 
-//helper functions
 enum wxbuildinfoformat
 {
     short_f, long_f
@@ -59,7 +54,6 @@ wxString wxbuildinfo(wxbuildinfoformat format)
     return wxbuild;
 }
 
-//(*IdInit(wxVLCFrame)
 const long wxVLCFrame::ID_PNL_PLAYER = wxNewId();
 const long wxVLCFrame::ID_STATICLINE1 = wxNewId();
 const long wxVLCFrame::ID_STTCTXT_CURRTIME = wxNewId();
@@ -77,16 +71,12 @@ const long wxVLCFrame::idMenuQuit = wxNewId();
 const long wxVLCFrame::idMenuAbout = wxNewId();
 const long wxVLCFrame::ID_STATUSBAR1 = wxNewId();
 const long wxVLCFrame::ID_TIMER1 = wxNewId();
-//*)
 
 BEGIN_EVENT_TABLE(wxVLCFrame, wxFrame)
-    //(*EventTable(wxVLCFrame)
-    //*)
 END_EVENT_TABLE()
 
 wxVLCFrame::wxVLCFrame(wxWindow *parent, wxWindowID id)
 {
-    //(*Initialize(wxVLCFrame)
     wxBoxSizer* BoxSizer2;
     wxBoxSizer* BoxSizer4;
     wxMenu* Menu1;
@@ -186,7 +176,6 @@ wxVLCFrame::wxVLCFrame(wxWindow *parent, wxWindowID id)
     Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&wxVLCFrame::OnQuit);
     Connect(idMenuAbout,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&wxVLCFrame::OnAbout);
     Connect(ID_TIMER1,wxEVT_TIMER,(wxObjectEventFunction)&wxVLCFrame::OnTimer1);
-    //*)
 
     Controls_Wnd = new wxPopupWindow(this);
     BoxSizer = new wxBoxSizer(wxVERTICAL);
@@ -196,7 +185,6 @@ wxVLCFrame::wxVLCFrame(wxWindow *parent, wxWindowID id)
 //    Player_Pnl->LoadFile(_T("./res/vlc.png"));
 //    Player_Pnl->CenterImage();
 
-    // Setup vlc
     vlc_inst = libvlc_new(0, NULL);
     media_player = libvlc_media_player_new(vlc_inst);
     vlc_evt_man = libvlc_media_player_event_manager(media_player);
@@ -209,9 +197,6 @@ wxVLCFrame::wxVLCFrame(wxWindow *parent, wxWindowID id)
 
 wxVLCFrame::~wxVLCFrame()
 {
-    //(*Destroy(wxVLCFrame)
-    //*)
-
     Controls_Wnd->Destroy();
 }
 
@@ -289,9 +274,13 @@ void wxVLCFrame::Stop()
 void wxVLCFrame::OnPlay_Pause(wxCommandEvent& event)
 {
     if (libvlc_media_player_is_playing(media_player))
+    {
         Pause();
+    }
     else
+    {
         Play();
+    }
 }
 
 void wxVLCFrame::OnStop(wxCommandEvent& event)
@@ -326,8 +315,7 @@ void wxVLCFrame::OnPositionChanged()
     int video_track = libvlc_video_get_track(media_player);
     int audio_track = libvlc_audio_get_track(media_player);
     int subtitle = libvlc_video_get_spu(media_player);
-    StatusBar1->SetStatusText(wxString::Format(_T("Video size: %d x %d     -     Video track: %d     -     Audio track: %d     -     Subtitle: %d"),
-                              width, height, video_track, audio_track, subtitle));
+    StatusBar1->SetStatusText(wxString::Format(_T("Video size: %d x %d     -     Video track: %d     -     Audio track: %d     -     Subtitle: %d"),width, height, video_track, audio_track, subtitle));
 
     BoxSizer3->Layout();
 }
@@ -336,24 +324,6 @@ void wxVLCFrame::OnAudioVolumeChanged()
 {
     int volume = libvlc_audio_get_volume(media_player);
     Volume_Sldr->SetValue(volume);
-}
-
-void OnPositionChanged_VLC(const libvlc_event_t *event, void *data)
-{
-    wxVLCFrame *mainFrame = ((wxVLCFrame *)wxGetApp().GetTopWindow());
-    mainFrame->CallAfter(&wxVLCFrame::OnPositionChanged);
-}
-
-void OnEndReached_VLC(const libvlc_event_t *event, void *data)
-{
-    wxVLCFrame *mainFrame = ((wxVLCFrame *)wxGetApp().GetTopWindow());
-    mainFrame->CallAfter(&wxVLCFrame::Stop);
-}
-
-void OnAudioVolumeChanged_VLC(const libvlc_event_t *event, void *data)
-{
-    wxVLCFrame *mainFrame = ((wxVLCFrame *)wxGetApp().GetTopWindow());
-    mainFrame->CallAfter(&wxVLCFrame::OnAudioVolumeChanged);
 }
 
 void wxVLCFrame::OnToggleFullscreen(wxMouseEvent& event)
@@ -377,7 +347,7 @@ void wxVLCFrame::OnToggleFullscreen(wxMouseEvent& event)
         BoxSizer->Add(Controls_Pnl, 0, wxEXPAND, 5);
         ShowFullScreen(true);
         Controls_Wnd->Fit();
-
+        
         wxSize ScreenSize = wxGetDisplaySize();
         wxSize Controls_Wnd_Size(Controls_Wnd->GetBestSize());
         Controls_Wnd->SetSize(ScreenSize.GetWidth(), wxDefaultCoord /*Controls_Wnd_Size.GetHeight()*/);
@@ -389,10 +359,10 @@ void wxVLCFrame::OnBackward(wxCommandEvent& event)
 {
     libvlc_time_t currTime = libvlc_media_player_get_time(media_player);
     currTime -= 60000;
-
+    
     if (currTime < 0)
-        currTime = 0;
-
+    currTime = 0;
+    
     libvlc_media_player_set_time(media_player, currTime);
     OnPositionChanged();
 }
@@ -402,10 +372,10 @@ void wxVLCFrame::OnForward(wxCommandEvent& event)
     libvlc_time_t currTime = libvlc_media_player_get_time(media_player);
     libvlc_time_t movieLength = libvlc_media_player_get_length(media_player);
     currTime += 60000;
-
+    
     if (currTime > movieLength)
-        currTime = movieLength - 1;
-
+    currTime = movieLength - 1;
+    
     libvlc_media_player_set_time(media_player, currTime);
     OnPositionChanged();
 }
@@ -425,13 +395,31 @@ void wxVLCFrame::OnTimer1(wxTimerEvent& event)
     {
         wxPoint pt;
         wxWindow *window = wxFindWindowAtPointer(pt);
-
+        
         if (Controls_Wnd->IsDescendant(window))
-            Timer1.StartOnce();
+        Timer1.StartOnce();
         else
         {
             Controls_Wnd->Hide();
             BoxSizer1->Layout();
         }
     }
+}
+
+void OnPositionChanged_VLC(const libvlc_event_t *event, void *data)
+{
+    wxVLCFrame *mainFrame = ((wxVLCFrame *)wxGetApp().GetTopWindow());
+    mainFrame->CallAfter(&wxVLCFrame::OnPositionChanged);
+}
+
+void OnEndReached_VLC(const libvlc_event_t *event, void *data)
+{
+    wxVLCFrame *mainFrame = ((wxVLCFrame *)wxGetApp().GetTopWindow());
+    mainFrame->CallAfter(&wxVLCFrame::Stop);
+}
+
+void OnAudioVolumeChanged_VLC(const libvlc_event_t *event, void *data)
+{
+    wxVLCFrame *mainFrame = ((wxVLCFrame *)wxGetApp().GetTopWindow());
+    mainFrame->CallAfter(&wxVLCFrame::OnAudioVolumeChanged);
 }

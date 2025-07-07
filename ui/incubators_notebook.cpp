@@ -1,5 +1,7 @@
 #include "./incubators_notebook.hpp"
 
+#include "./main_frame.hpp"
+
 using namespace std;
 
 namespace life_incubator
@@ -16,13 +18,17 @@ namespace life_incubator
 		incubationPanel = new incubation_panel(this,wxID_ANY);
 		AddPage(incubationPanel,"Incubations history");
 
-		incubation incubation_example("Green hamster","Phodopus roborovski","C:/Users/iarfe/OneDrive/Escritorio/Iarfen/Proyectos/Ciencia/Laboratorio/life-incubator/desktop-client/tests/dna_example","ismaelc",scifir::time_duration("22 day"),std::chrono::system_clock::now(),"incubator-1",scifir::scalar_unit("20 mL/s"),scifir::temperature("311 K"));
-		incubationQueuePanel->load_incubation_detail(incubation_example);
+		for (const incubation& x_incubation : life_incubator::incubations)
+		{
+			incubationQueuePanel->add_incubation(x_incubation);
+		}
 
-		//wxBoxSizer* horizontal_sizer = new wxBoxSizer(wxHORIZONTAL);
-		//horizontal_sizer->Add(treeCtrl,1);
-		//horizontal_sizer->Add(genesNotebook,2,wxEXPAND);
+		for (const incubator& x_incubator : life_incubator::incubators)
+		{
+			incubatorPanel->add_incubator(x_incubator);
+		}
 
-		//SetSizer(horizontal_sizer);
+		incubationQueuePanel->load_incubation_detail(life_incubator::incubations[0]);
+		incubatorPanel->load_incubator_detail(life_incubator::incubators[0]);
 	}
 }

@@ -1,6 +1,8 @@
 #ifndef LIFE_INCUBATOR_DESKTOP_CLIENT_UI_MAIN_FRAME_HPP_INCLUDED
 #define LIFE_INCUBATOR_DESKTOP_CLIENT_UI_MAIN_FRAME_HPP_INCLUDED
 
+#define _HAS_STD_BYTE 0
+
 #include <string>
 
 #include "wx/frame.h"
@@ -11,6 +13,9 @@
 #include "wx/colour.h"
 
 #include "scifir/biology.hpp"
+
+#include "data/incubation.hpp"
+#include "data/incubator.hpp"
 
 #include "./menu_bar.hpp"
 #include "./incubators_notebook.hpp"
@@ -46,10 +51,13 @@ namespace life_incubator
 	extern wxColour active_line_background_colour;
 	extern wxColour text_colour;
 
+	extern vector<incubation> incubations;
+	extern vector<incubator> incubators;
+
 	class main_frame: public wxFrame
 	{
 		public:
-			main_frame(const string&, const wxString&, const wxPoint&, const wxSize&, long);
+			main_frame(const wxString&, const wxPoint&, const wxSize&, long);
 
 			menu_bar* menuBar;
 			incubators_notebook* incubatorsNotebook;

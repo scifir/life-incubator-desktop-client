@@ -16,12 +16,17 @@ namespace life_incubator
 			enum status { AVAILABLE, INCUBATING, INCUBATION_FINISHED, POWEROFF };
 
 			incubator();
+			explicit incubator(const string& new_name,incubator::status new_incubator_status,incubator::nutrients_injection new_nutrients_injection_type,const scifir::scalar_unit& new_max_water_volume,const scifir::scalar_unit& new_max_nutrients_volume,const scifir::scalar_unit& new_max_blood_volume,int new_number_incubations);
+
+			string get_status_text() const;
 
 			string name;
+			status incubator_status;
 			nutrients_injection nutrients_injection_type;
-			scifir::volume max_water_volume;
-			scifir::volume max_nutrients_volume;
-			scifir::volume max_blood_volume;
+			scifir::scalar_unit max_water_volume;
+			scifir::scalar_unit max_nutrients_volume;
+			scifir::scalar_unit max_blood_volume;
+			int number_incubations;
 	};
 }
 

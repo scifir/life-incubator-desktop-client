@@ -1,5 +1,13 @@
 #include "./menu_bar.hpp"
 
+#include <wx/msgdlg.h>
+
+#ifdef IS_UNIX
+	#include <bluetooth/bluetooth.h>
+	#include <bluetooth/hci.h>
+	#include <bluetooth/hci_lib.h>
+#endif
+
 using namespace std;
 
 namespace life_incubator
@@ -14,94 +22,25 @@ namespace life_incubator
 
 	menu_bar::menu_bar() : wxMenuBar()
 	{
-		wxMenu *fileMenu = new wxMenu;
-        fileMenu->Append(wxID_ANY, "&New");
-		fileMenu->Append(wxID_ANY, "&Reopen in edition mode");
-		fileMenu->Append(wxID_ANY, "&Save gene");
-		fileMenu->Append(wxID_ANY, "&Save all");
-		fileMenu->AppendSeparator();
-        fileMenu->Append(wxID_ANY, "&Open DNA");
-        fileMenu->Append(wxID_ANY, "&Open DNA from network");
-		fileMenu->Append(wxID_ANY, "&Open genes collection");
-		fileMenu->Append(wxID_ANY, "&Open genes collection from network");
-		fileMenu->Append(wxID_ANY, "&Recent");
-		fileMenu->Append(wxID_ANY, "&Recent folders");
-		fileMenu->Append(wxID_ANY, "&Close project");
-        fileMenu->AppendSeparator();
-        fileMenu->Append(wxID_ANY, "&Explanation");
-        fileMenu->Append(wxID_ANY, "&Settings");
-		fileMenu->Append(wxID_ANY, "&Export");
-        fileMenu->AppendSeparator();
-        fileMenu->Append(wxID_EXIT, "&Quit");
+		wxMenu *incubationMenu = new wxMenu;
+        incubationMenu->Append(1, "&New incubation");
+        incubationMenu->AppendSeparator();
+        incubationMenu->Append(wxID_EXIT, "&Quit");
 
-        wxMenu *editMenu = new wxMenu;
-        editMenu->Append(wxID_ANY, "&Undo");
-        editMenu->Append(wxID_ANY, "&Redo");
-        editMenu->AppendSeparator();
-        editMenu->Append(wxID_ANY, "&Add gene");
-        editMenu->Append(wxID_ANY, "&Edit gene");
-        editMenu->AppendSeparator();
-        editMenu->Append(wxID_ANY, "&Add chromosome");
-        editMenu->Append(wxID_ANY, "&Edit chromosome");
-		editMenu->AppendSeparator();
-        editMenu->Append(wxID_ANY, "&Copy");
-		editMenu->Append(wxID_ANY, "&Paste");
-		editMenu->AppendSeparator();
-		editMenu->Append(wxID_ANY, "&Search");
-		editMenu->AppendSeparator();
-		editMenu->Append(wxID_ANY, "&Restore essential genes");
-		editMenu->Append(wxID_ANY, "&Restore non-essential genes");
-		editMenu->Append(wxID_ANY, "&Restore original gene");
+        wxMenu *incubatorsMenu = new wxMenu;
+        incubatorsMenu->Append(3, "&Detect local incubators");
+        incubatorsMenu->Append(4, "&Configure remote network");
 
-		wxMenu *incubateMenu = new wxMenu;
-		incubateMenu->Append(wxID_ANY, "&Analyze factibility");
-		incubateMenu->AppendSeparator();
-		incubateMenu->Append(wxID_ANY, "&Incubate");
-		incubateMenu->Append(wxID_ANY, "&Open DNA synthetizer");
-		incubateMenu->Append(wxID_ANY, "&Open DNA debugger");
-
-		wxMenu *toolsMenu = new wxMenu;
-		toolsMenu->Append(wxID_ANY, "&Modifications history");
-		toolsMenu->Append(wxID_ANY, "&Summary of genetic expression");
-		toolsMenu->AppendSeparator();
-		toolsMenu->Append(wxID_ANY, "&Incubations diary");
-		toolsMenu->Append(wxID_ANY, "&Genes collections");
-		toolsMenu->Append(wxID_ANY, "&DNA comparer");
-		toolsMenu->Append(wxID_ANY, "&Genes comparer");
-		toolsMenu->Append(wxID_ANY, "&DNA mixer");
-		toolsMenu->Append(wxID_ANY, "&Develoment diaries");
-		
-		wxMenu *resourcesMenu = new wxMenu;
-		resourcesMenu->Append(wxID_ANY, "&GenHub");
-		resourcesMenu->Append(wxID_ANY, "&Uniprot");
-		resourcesMenu->Append(wxID_ANY, "&PDB");
-		resourcesMenu->Append(wxID_ANY, "&PubChem");
-		
-		wxMenu *windowsMenu = new wxMenu;
-		windowsMenu->Append(wxID_ANY, "&Open window");
-		windowsMenu->Append(wxID_ANY, "&Close window");
-		windowsMenu->AppendSeparator();
-		windowsMenu->Append(wxID_ANY, "&This window");
-		
 		wxMenu *helpMenu = new wxMenu;
-		helpMenu->Append(wxID_ANY, "&Manual");
-		helpMenu->Append(wxID_ANY, "&Genes encyclopedia");
-		helpMenu->AppendSeparator();
-		helpMenu->Append(wxID_ANY, "&Search updates");
-		helpMenu->Append(wxID_ANY, "&About the Bioeditor");
+		helpMenu->Append(5, "&Search updates");
+		helpMenu->Append(6, "&About the incubator");
 
-        /*wxMenu *menuHelp = new wxMenu;
-        menuHelp->Append(wxID_ABOUT);*/
-
-        //wxColour menu_bar_color2 = wxColour(255, 255, 255);
-        //menuBar->SetTextColour(menu_bar_color2);
-        this->Append(fileMenu, "&File");
-        this->Append(editMenu, "&Edit");
-		this->Append(incubateMenu, "&Incubate");
-		this->Append(toolsMenu, "&Tools");
-		this->Append(resourcesMenu, "&Resources");
-		this->Append(windowsMenu, "&Windows");
+        this->Append(incubationMenu, "&Incubate");
+        this->Append(incubatorsMenu, "&Incubators");
 		this->Append(helpMenu, "&Help");
+
+		Bind(wxEVT_MENU, &menu_bar::detect_local_incubators, this, 3);
+		Bind(wxEVT_MENU, &menu_bar::OnAbout, this, 6);
 	}
 
 	void menu_bar::OnExit(wxCommandEvent& event)
@@ -111,11 +50,25 @@ namespace life_incubator
 
 	void menu_bar::OnAbout(wxCommandEvent& event)
 	{
-		//wxMessageBox("This is a wxWidgets' Hello world sample", "About Hello World", wxOK | wxICON_INFORMATION);
+		wxMessageBox("Life Incubator is the desktop client that manages any number of incubator machines, connected locally or by network. Incubators allow the development of embryos that finally become animals.", "About Life Incubator", wxOK | wxICON_INFORMATION);
 	}
 
 	void menu_bar::OnHello(wxCommandEvent& event)
 	{
 		//wxLogMessage("Hello world from wxWidgets!");
+	}
+
+	void menu_bar::detect_local_incubators(wxCommandEvent& event)
+	{
+		wxMessageBox("This is sample message", "Detect local incubators");
+		/*int dev_id = hci_get_route(NULL); // Get the ID of the first available Bluetooth adapter
+    	if (dev_id < 0)
+		{
+        	wxMessageBox("No bluetooth adapter found", "Detect local incubators");
+    	}
+		else
+		{
+			wxMessageBox("Device ID: " + to_string(dev_id), "Detect local incubators");
+		}*/
 	}
 }
