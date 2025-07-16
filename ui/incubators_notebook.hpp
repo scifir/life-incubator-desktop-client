@@ -1,6 +1,8 @@
 #ifndef LIFE_INCUBATOR_DESKTOP_CLIENT_UI_INCUBATORS_NOTEBOOK_HPP_INCLUDED
 #define LIFE_INCUBATOR_DESKTOP_CLIENT_UI_INCUBATORS_NOTEBOOK_HPP_INCLUDED
 
+#define _HAS_STD_BYTE 0
+
 #include <wx/toolbook.h>
 
 #include "./incubation_queue_panel.hpp"

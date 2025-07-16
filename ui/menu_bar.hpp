@@ -11,6 +11,8 @@
 #include "wx/toolbar.h"
 #include "wx/treectrl.h"
 
+#include "./new_incubation_dialog.hpp"
+
 using namespace std;
 
 namespace life_incubator
@@ -24,7 +26,13 @@ namespace life_incubator
 			void OnHello(wxCommandEvent& event);
 			void OnExit(wxCommandEvent& event);
 			void OnAbout(wxCommandEvent& event);
+			void new_incubation(wxCommandEvent& event);
 			void detect_local_incubators(wxCommandEvent& event);
+			
+			new_incubation_dialog* new_incubation_dialog;
+			wxMenu* incubationMenu;
+			wxMenu* incubatorsMenu;
+			wxMenu* helpMenu;
 			//wxDECLARE_EVENT_TABLE();
 	};
 }

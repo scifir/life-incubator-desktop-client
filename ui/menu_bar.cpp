@@ -22,16 +22,16 @@ namespace life_incubator
 
 	menu_bar::menu_bar() : wxMenuBar()
 	{
-		wxMenu *incubationMenu = new wxMenu;
+		incubationMenu = new wxMenu;
         incubationMenu->Append(1, "&New incubation");
         incubationMenu->AppendSeparator();
         incubationMenu->Append(wxID_EXIT, "&Quit");
 
-        wxMenu *incubatorsMenu = new wxMenu;
+        incubatorsMenu = new wxMenu;
         incubatorsMenu->Append(3, "&Detect local incubators");
         incubatorsMenu->Append(4, "&Configure remote network");
 
-		wxMenu *helpMenu = new wxMenu;
+		helpMenu = new wxMenu;
 		helpMenu->Append(5, "&Search updates");
 		helpMenu->Append(6, "&About the incubator");
 
@@ -39,6 +39,7 @@ namespace life_incubator
         this->Append(incubatorsMenu, "&Incubators");
 		this->Append(helpMenu, "&Help");
 
+		Bind(wxEVT_MENU, &menu_bar::new_incubation, this, 1);
 		Bind(wxEVT_MENU, &menu_bar::detect_local_incubators, this, 3);
 		Bind(wxEVT_MENU, &menu_bar::OnAbout, this, 6);
 	}
@@ -56,6 +57,11 @@ namespace life_incubator
 	void menu_bar::OnHello(wxCommandEvent& event)
 	{
 		//wxLogMessage("Hello world from wxWidgets!");
+	}
+
+	void menu_bar::new_incubation(wxCommandEvent& event)
+	{
+		new_incubation_dialog = new life_incubator::new_incubation_dialog();
 	}
 
 	void menu_bar::detect_local_incubators(wxCommandEvent& event)

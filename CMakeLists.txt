@@ -127,7 +127,7 @@ find_package(wxWidgets REQUIRED COMPONENTS core net base adv stc aui html media 
 #message(${wxWidgets_USE_FILE})
 
 if (PLATFORM MATCHES "windows")
-	add_executable(${PROJECT_NAME} WIN32 ${SRC_LIST} ${SRC_LIST1} ${SRC_LIST2} ${SRC_LIST3} ${SRC_LIST4})
+	add_executable(${PROJECT_NAME} WIN32 msvc/resource.rc ${SRC_LIST} ${SRC_LIST1} ${SRC_LIST2} ${SRC_LIST3} ${SRC_LIST4})
 endif()
 
 if (PLATFORM MATCHES "linux")
@@ -156,3 +156,29 @@ endif()
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
 
 #add_definitions(${wxWidgets_DEFINITIONS})
+
+set(WIX_CANDLE_EXECUTABLE "candle") # or full path
+set(WIX_LIGHT_EXECUTABLE "light")   # or full path
+
+set(MYAPP_BINARY "${CMAKE_BINARY_DIR}/installer/MyApp.exe")
+set(WXS_FILE "${CMAKE_CURRENT_SOURCE_DIR}/MyApp.wxs")
+set(WIXOBJ_FILE "${CMAKE_CURRENT_BINARY_DIR}/MyApp.wixobj")
+set(MSI_OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/MyAppInstaller.msi")
+
+add_custom_command(
+    OUTPUT ${WIXOBJ_FILE}
+    COMMAND ${WIX_CANDLE_EXECUTABLE} -o ${WIXOBJ_FILE} -dMyAppBinary=${MYAPP_BINARY} ${WXS_FILE}
+    DEPENDS ${WXS_FILE} ${MYAPP_BINARY}
+    COMMENT "Running WiX candle..."
+)
+
+add_custom_command(
+    OUTPUT ${MSI_OUTPUT}
+    COMMAND ${WIX_LIGHT_EXECUTABLE} -o ${MSI_OUTPUT} ${WIXOBJ_FILE}
+    DEPENDS ${WIXOBJ_FILE}
+    COMMENT "Running WiX light..."
+)
+
+add_custom_target(MyAppInstaller ALL
+    DEPENDS ${MSI_OUTPUT}
+)

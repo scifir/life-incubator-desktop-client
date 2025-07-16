@@ -1,0 +1,38 @@
+#include <windows.h>  // Needed for standard definitions
+
+// Icon Resource
+IDI_APP_ICON ICON "../ui/images/life-incubator-desktop-icon.ico"
+
+// Version Info
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION     1,0,0,0
+ PRODUCTVERSION  1,0,0,0
+ FILEFLAGSMASK   VS_FFI_FILEFLAGSMASK
+ FILEFLAGS       0
+ FILEOS          VOS__WINDOWS32
+ FILETYPE        VFT_APP
+ FILESUBTYPE     VFT_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0" // Language + Code Page
+        BEGIN
+            VALUE "CompanyName",      "scifir"
+            VALUE "FileDescription",  "Desktop client for monitoring and managing life incubator machines"
+            VALUE "FileVersion",      "1.0.0.0"
+            VALUE "InternalName",     "life-incubator-desktop-client"
+            VALUE "LegalCopyright",   "© 2025 scifir"
+            VALUE "OriginalFilename", "life-incubator-desktop-client.exe"
+            VALUE "ProductName",      "Life incubator desktop client"
+            VALUE "ProductVersion",   "1.0.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 1200
+    END
+END
+
+// Optional bitmap or cursor resources
+// IDB_MY_BITMAP BITMAP "mybitmap.bmp"
+// IDC_MY_CURSOR CURSOR "mycursor.cur"

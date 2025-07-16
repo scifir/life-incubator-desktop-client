@@ -29,4 +29,17 @@ namespace life_incubator
 			return "Powered off";
 		}
 	}
+
+	vector<incubator> get_available_incubators(const vector<incubator>& incubators)
+	{
+		vector<incubator> available_incubators = vector<incubator>();
+		for (const incubator& x_incubator : incubators)
+		{
+			if (x_incubator.incubator_status == incubator::AVAILABLE)
+			{
+				available_incubators.push_back(x_incubator);
+			}
+		}
+		return available_incubators;
+	}
 }

@@ -2,6 +2,7 @@
 #define LIFE_INCUBATOR_DESKTOP_CLIENT_DATA_INCUBATOR_HPP_INCLUDED
 
 #include <string>
+#include <vector>
 
 #include "scifir/units.hpp"
 
@@ -28,6 +29,8 @@ namespace life_incubator
 			scifir::scalar_unit max_blood_volume;
 			int number_incubations;
 	};
+
+	vector<incubator> get_available_incubators(const vector<incubator>& incubators);
 }
 
 #endif // LIFE_INCUBATOR_DESKTOP_CLIENT_DATA_INCUBATOR_HPP_INCLUDED

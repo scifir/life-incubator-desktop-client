@@ -1,9 +1,11 @@
 #include "./app.hpp"
-#include "./main_frame.hpp"
 
 #include <string>
 
 #include <wx/splash.h>
+
+#include "./main_frame.hpp"
+#include "./task_bar.hpp"
 
 using namespace std;
 
@@ -20,16 +22,18 @@ bool main_app::OnInit()
 	}
 	wxYield();
 
-	SetAppDisplayName("Life Incubator");
-	SetAppName("life-incubator");
+	SetAppDisplayName("Life incubator desktop client");
+	SetAppName("life-incubator-desktop-client");
 	SetClassName("app");
 	SetVendorDisplayName("Ismael Correa Castro");
 	SetVendorName("ismaelcc");
 
-	life_incubator::main_frame *frame = new life_incubator::main_frame("Life Incubator", wxDefaultPosition, wxSize(2000, 1600),wxDEFAULT_FRAME_STYLE);
+	life_incubator::main_frame* frame = new life_incubator::main_frame("Life incubator desktop client", wxDefaultPosition, wxSize(2000, 1600),wxDEFAULT_FRAME_STYLE);
+
+	life_incubator::task_bar* task_bar = new life_incubator::task_bar();
 
 	wxBitmap icon_bitmap;
-	if (icon_bitmap.LoadFile("ui/images/life_incubator_icon.png", wxBITMAP_TYPE_PNG))
+	if (icon_bitmap.LoadFile("ui/images/life-incubator-icon128.png", wxBITMAP_TYPE_PNG))
 	{
 		wxIcon frame_icon;
 		frame_icon.CopyFromBitmap(icon_bitmap);

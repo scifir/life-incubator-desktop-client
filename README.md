@@ -13,3 +13,7 @@ This desktop application is in **alpha stage of development**. That means that i
 ### Build
 
 Works with **g++**, **clang** and **msvc**, for **Linux** and **Windows** operating systems.
+
+### Attribution to Flaticon
+
+Some icons and images have been obtained from Flaticon, they are attributed in this README file because of that kind of help they have indirectly provided.

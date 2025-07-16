@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="MyApp" Language="1033" Version="1.0.0.0" Manufacturer="YourCompany" UpgradeCode="PUT-GUID-HERE">
+    <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine" />
+
+    <MediaTemplate />
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="MyApp" />
+      </Directory>
+    </Directory>
+
+    <DirectoryRef Id="INSTALLFOLDER">
+      <Component Id="MyAppExe" Guid="PUT-GUID-HERE-1">
+        <File Id="MyAppExeFile" Name="MyApp.exe" Source="$(var.MyAppBinary)" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+
+    <Feature Id="DefaultFeature" Level="1">
+      <ComponentRef Id="MyAppExe" />
+    </Feature>
+  </Product>
+</Wix>
