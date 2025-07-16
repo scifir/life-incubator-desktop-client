@@ -1,18 +1,17 @@
 # TODO List - Desktop client of life incubator
 
-## ERRORS (4)
+## ERRORS (3)
 
 - TODO: center the splash screen in Linux
 - TODO: solve the core dump error
 - TODO: solve the error with the video for Linux (try wxVLC before openshot)
-- TODO: the program remains open even after closing it inside Windows
 
-## BUILD (3)
+## BUILD (4)
 
-- TODO: check if it's needed an rc file for Windows builds
 - TODO: configure the build for MSBuild with the path of the libraries
 - TODO: check what has happened with the file setup.h with msvc finally
 - TODO: add the macro of the byte as definition inside CMakeLists.txt
+- TODO: configure the wix installer
 
 ## DATA (5)
 
@@ -22,11 +21,14 @@
 - TODO: think a fast way to add incubators, maybe just by reading incubator bluetooth addresses
 - TODO: finish the bluetooth descriptor of incubators
 
-## UI (6)
+## UI (5)
 
 - TODO: add the data of incubations and incubators to the lists
 - TODO: add the data of incubations and incubators to the details
 - TODO: show the remaining time of nutrients given some flux
 - TODO: create the dialog of new incubation
 - TODO: create the dialog of new incubator
+
+## Advanced (1)
+
 - TODO: custom selector of species for wxWidgets

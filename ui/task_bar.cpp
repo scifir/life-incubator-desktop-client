@@ -18,6 +18,7 @@ namespace life_incubator
     task_bar::~task_bar()
     {
         RemoveIcon();
+        Destroy();
     }
 
      wxMenu* task_bar::CreatePopupMenu() {
@@ -30,6 +31,7 @@ namespace life_incubator
      void task_bar::OnMenuExit(wxCommandEvent& event) {
          // Handle exit action
          RemoveIcon();
+         Destroy();
          //wxGetApp().ExitMainLoop();
      }
 

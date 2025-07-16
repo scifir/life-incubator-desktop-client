@@ -21,9 +21,15 @@
     #include <wx/wx.h>
 #endif
 
+#include "./main_frame.hpp"
+#include "./task_bar.hpp"
+
 class main_app: public wxApp
 {
     public:
+        life_incubator::main_frame* frame;
+        life_incubator::task_bar* task_bar;
+
         virtual bool OnInit() override;
         virtual int OnExit();
 };

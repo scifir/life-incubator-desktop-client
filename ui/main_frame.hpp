@@ -65,6 +65,7 @@ namespace life_incubator
 		private:
 			void OnTreeItemMenu(wxTreeEvent&);
 			void OnMenuItem(wxCommandEvent&);
+			void OnClose(wxCloseEvent& event);
 	};
 }
 

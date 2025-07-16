@@ -74,7 +74,7 @@ namespace life_incubator
 		wxStaticText* incubation_time = new wxStaticText(detail,wxID_ANY,wxString("2 days / 22 days"));
 		wxStaticBitmap* incubation_time_icon = new wxStaticBitmap(detail, wxID_ANY, wxBitmap("ui/images/time-icon48.png", wxBITMAP_TYPE_PNG));
 
-		wxStaticText* incubator_name = new wxStaticText(detail,wxID_ANY,wxString(x_incubation.incubator));
+		wxStaticText* incubator_name = new wxStaticText(detail,wxID_ANY,wxString(x_incubation.incubator->name));
 
 		wxBoxSizer* incubation_sizer = new wxBoxSizer(wxVERTICAL);
 		incubation_sizer->Add(incubation_name,0);

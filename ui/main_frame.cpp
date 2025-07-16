@@ -33,14 +33,14 @@ namespace life_incubator
         SetMenuBar(menuBar);
 
         wxFrame::Bind(wxEVT_MENU, [this](wxCommandEvent& event) {
-            Close(true);
+            Destroy();
         }, wxID_EXIT);
 
         incubator x_incubator = incubator("Incubator 1",incubator::AVAILABLE,incubator::NUTRIENTS_FLOW,scifir::scalar_unit("3 L"),scifir::scalar_unit("1 L"),scifir::scalar_unit("1 L"),2);
         incubators.push_back(x_incubator);
         incubator y_incubator = incubator("Incubator 2",incubator::INCUBATING,incubator::NUTRIENTS_FLOW,scifir::scalar_unit("3 L"),scifir::scalar_unit("1 L"),scifir::scalar_unit("1 L"),0);
         incubators.push_back(y_incubator);
-        incubation incubation_example("Green hamster","Phodopus roborovski","C:/Users/iarfe/OneDrive/Escritorio/Iarfen/Proyectos/Ciencia/Laboratorio/life-incubator/desktop-client/tests/dna_example","ismaelc",scifir::scalar_unit("22 day"),std::chrono::system_clock::now(),"incubator-1",scifir::scalar_unit("20 mL/s"),scifir::scalar_unit("311 K"),incubation::INCUBATING);
+        incubation incubation_example("Green hamster","Phodopus roborovski","C:/Users/iarfe/OneDrive/Escritorio/Iarfen/Proyectos/Ciencia/Laboratorio/life-incubator/desktop-client/tests/dna_example","ismaelc",scifir::scalar_unit("22 day"),std::chrono::system_clock::now(),make_shared<incubator>(x_incubator),scifir::scalar_unit("20 mL/s"),scifir::scalar_unit("311 K"),incubation::INCUBATING);
         incubations.push_back(incubation_example);
 
         incubatorsNotebook = new incubators_notebook(this,wxID_ANY);
@@ -101,5 +101,9 @@ namespace life_incubator
         //{
             wxMessageBox("You clicked on the item");
         //}
+    }
+
+    void main_frame::OnClose(wxCloseEvent& event) {
+        Destroy(); // Important: properly destroys the window and exits the app if it's the main window
     }
 }

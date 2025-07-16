@@ -1,6 +1,7 @@
 #ifndef LIFE_INCUBATOR_DESKTOP_CLIENT_DATA_INCUBATOR_HPP_INCLUDED
 #define LIFE_INCUBATOR_DESKTOP_CLIENT_DATA_INCUBATOR_HPP_INCLUDED
 
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -10,6 +11,8 @@ using namespace std;
 
 namespace life_incubator
 {
+	class incubation;
+
 	class incubator
 	{
 		public:
@@ -28,6 +31,7 @@ namespace life_incubator
 			scifir::scalar_unit max_nutrients_volume;
 			scifir::scalar_unit max_blood_volume;
 			int number_incubations;
+			shared_ptr<incubation> current_incubation;
 	};
 
 	vector<incubator> get_available_incubators(const vector<incubator>& incubators);
